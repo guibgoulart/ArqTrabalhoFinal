@@ -6,8 +6,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class OrderEstimateServiceApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(OrderEstimateServiceApplication.class, args);
-	}
+    public static void main(String[] args) {
+        SpringApplication.run(OrderEstimateServiceApplication.class, args);
+    }
 
 }
