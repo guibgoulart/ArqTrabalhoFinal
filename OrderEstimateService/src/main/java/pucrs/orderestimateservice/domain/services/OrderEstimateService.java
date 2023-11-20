@@ -1,6 +1,7 @@
 package pucrs.orderestimateservice.domain.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 import pucrs.orderestimateservice.application.clients.CityClient;
 import pucrs.orderestimateservice.application.clients.PromotionClient;
@@ -26,6 +27,11 @@ public class OrderEstimateService {
 
     @Autowired
     private PromotionClient promotionClient;
+
+    @KafkaListener(topics = "orders")
+    private void listen(OrderEstimate input) {
+        generateOrderEstimate(input);
+    }
 
     public OrderEstimate generateOrderEstimate(OrderEstimate orderEstimate) {
         calculateFinalValue(orderEstimate);

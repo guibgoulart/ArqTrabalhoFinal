@@ -1,13 +1,19 @@
 package pucrs.orderestimateservice.presentation.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.ApplicationRunner;
+import org.springframework.context.annotation.Bean;
+import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.kafka.support.SendResult;
 import org.springframework.web.bind.annotation.*;
 import pucrs.orderestimateservice.application.dto.OrderEstimateDTO;
 import pucrs.orderestimateservice.application.mapper.OrderEstimateMapper;
+import pucrs.orderestimateservice.domain.models.OrderEstimate;
 import pucrs.orderestimateservice.domain.services.OrderEstimateService;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -16,12 +22,12 @@ public class OrderEstimateController {
     @Autowired
     private OrderEstimateService orderEstimateService;
 
-    @PostMapping("/generate")
-    public OrderEstimateDTO generateOrderEstimate(@RequestBody OrderEstimateDTO orderEstimateDTO) {
-        var orderEstimate = orderEstimateService
-                .generateOrderEstimate(OrderEstimateMapper.INSTANCE.orderEstimateDTOToOrderEstimate(orderEstimateDTO));
+    @Autowired
+    private KafkaTemplate<String, OrderEstimate> template;
 
-        return OrderEstimateMapper.INSTANCE.orderEstimateToOrderEstimateDTO(orderEstimate);
+    @PostMapping("/generate")
+    public void generateOrderEstimate(@RequestBody OrderEstimateDTO orderEstimateDTO) {
+        template.send("orders",OrderEstimateMapper.INSTANCE.orderEstimateDTOToOrderEstimate(orderEstimateDTO));
     }
 
     @GetMapping("/{id}")
