@@ -21,4 +21,8 @@ public class CityService {
         var city = cityRepository.findByPostalCodePrefix(postalCode);
         return city != null;
     }
+
+    public City getCityByName(String cityName) {
+        return cityRepository.findByName(cityName);
+    }
 }

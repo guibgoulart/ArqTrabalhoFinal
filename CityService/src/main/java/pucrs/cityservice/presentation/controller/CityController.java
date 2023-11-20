@@ -30,4 +30,10 @@ public class CityController {
     public boolean checkIfCityIsAvailable(@PathVariable(value="postalCode") String postalCode) {
         return cityService.checkIfCityIsAvailable(postalCode);
     }
+
+    @GetMapping("/name/{cityName}")
+    public CityDTO getCityByName(@PathVariable(value="cityName") String cityName) {
+        City city = cityService.getCityByName(cityName);
+        return CityMapper.INSTANCE.cityToCityDTO(city);
+    }
 }
